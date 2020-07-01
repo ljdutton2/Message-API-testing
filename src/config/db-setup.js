@@ -1,13 +1,24 @@
-const mongoose = require('mongoose');
+
 
 // connect to mongo db
-const mongoUri = process.env.MONGODB_URI
-mongoose.set('useUnifiedTopology', true)
-mongoose.set('useFindAndModify', false)
-mongoose.connect(mongoUri, { useNewUrlParser: true })
+const mongoose = require("mongoose");
+assert = require("assert");
 
-mongoose.connection.on('error', () => {
-  throw new Error(`unable to connect to database: ${mongoUri}`)
-})
+const url = "mongodb://localhost/reddit-db";
+mongoose.Promise = global.Promise;
+mongoose.connect(
+  "mongodb://localhost/chaiDB",
+  { useNewUrlParser: true },
+  function(err, db) {
+    assert.equal(null, err);
+    console.log("Connected successfully to database");
 
-module.exports = mongoose.connection
+    // turn on for testing
+    // db.close();
+  }
+);
+mongoose.connection.on("error", console.error.bind(console, "MongoDB connection Error:"));
+
+mongoose.set("debug", true);
+
+module.exports = mongoose.connection;
