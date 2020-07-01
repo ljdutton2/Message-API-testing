@@ -22,9 +22,8 @@ require('./config/db-setup.js')
 const router = require('./routes/index.js')
 app.use(router)
 
-// Start Server
-app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}!`)
-})
+const port = 2222
 
-module.exports = app
+app.listen(port, () => console.log(` app listening at http://localhost:${port}`))
+
+module.exports = app;
