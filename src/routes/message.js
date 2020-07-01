@@ -55,16 +55,35 @@ router.post('/', (req, res) => {
 /** Route to update an existing message. */
 router.put('/:messageId', (req, res) => {
     // TODO: Update the matching message using `findByIdAndUpdate`
-
+    Message.findByIdAndUpdate(req.params.messageId, req.body).then(() => {
+        return User.findOne({_id: req.params.messageId})
+    }).then((user) => {
     // TODO: Return the updated Message object as JSON
+        return res.json({message})
+    }).catch((err) => {
+        throw err.message
+    })
+    
 })
 
 /** Route to delete a message. */
 router.delete('/:messageId', (req, res) => {
     // TODO: Delete the specified Message using `findByIdAndDelete`. Make sure
     // to also delete the message from the User object's `messages` array
+    User.findByIdAndDelete(req.params.messageId).then((result) => {
+        if (result === null) {
+            return res.json({message: 'Message does not exist.'})
+        }
+        return res.json({
+            'message': 'Successfully deleted.',
+            '_id': req.params.messageId
+        })
+    })
+    .catch((err) => {
+        throw err.message
+    })
 
-    // TODO: Return a JSON object indicating that the Message has been deleted
+    
 })
 
 module.exports = router
